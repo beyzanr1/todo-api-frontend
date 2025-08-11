@@ -1,0 +1,25 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--topbar-h);
+  z-index: 1000; /* sidebar ve içerikten önde */
+}
+
+.topbar {
+  height: var(--topbar-h);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.brand {
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  user-select: none;
+}

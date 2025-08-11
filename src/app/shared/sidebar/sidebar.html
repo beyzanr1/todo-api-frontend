@@ -1,1 +1,53 @@
-<p>sidebar works!</p>
+<!-- KAPALIYKEN görünen dış "çizgi" (handle) + ikon -->
+<div
+  class="collapsed-handle"
+  *ngIf="collapsed"
+  (click)="toggle()"
+  title="Menüyü aç">
+  <mat-icon>menu</mat-icon>
+</div>
+
+<nav class="sidebar" [class.collapsed]="collapsed">
+  <!-- AÇIKKEN görünen üst kısım (hamburger + profil) -->
+  <div class="head" *ngIf="!collapsed">
+    <button mat-icon-button (click)="toggle()" aria-label="Menüyü Aç/Kapat">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="profile">
+      <div class="avatar">A</div>
+      <div class="meta">
+        <div class="name">Admin</div>
+        <div class="role">Yönetici</div>
+      </div>
+    </div>
+  </div>
+ <div class="head-spacer" *ngIf="collapsed"></div>
+  <mat-divider *ngIf="!collapsed"></mat-divider>
+
+  <!-- Menü -->
+  <div class="menu">
+    <a mat-list-item routerLink="/dashboard" routerLinkActive="active" [attr.title]="collapsed ? 'Dashboard' : null">
+      <mat-icon>dashboard</mat-icon>
+      <span *ngIf="!collapsed">Dashboard</span>
+    </a>
+
+    <a mat-list-item routerLink="/gorevler" routerLinkActive="active" [attr.title]="collapsed ? 'Görevler' : null">
+      <mat-icon>checklist</mat-icon>
+      <span *ngIf="!collapsed">Görevler</span>
+    </a>
+
+    <a mat-list-item routerLink="/kullanicilar" routerLinkActive="active" [attr.title]="collapsed ? 'Kullanıcılar' : null">
+      <mat-icon>group</mat-icon>
+      <span *ngIf="!collapsed">Kullanıcılar</span>
+    </a>
+  </div>
+
+  <!-- En altta Çıkış -->
+  <div class="bottom">
+    <button mat-button class="logout" [class.iconOnly]="collapsed">
+      <mat-icon>logout</mat-icon>
+      <span *ngIf="!collapsed">Çıkış Yap</span>
+    </button>
+  </div>
+</nav>

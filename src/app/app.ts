@@ -1,11 +1,18 @@
-import { Component, signal } from '@angular/core';
+
+import { Component } from '@angular/core';
+
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.html',
   standalone: false,
-  styleUrl: './app.scss'
+  templateUrl: './app.html',
+   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('todo-frontend');
+   collapsed = false;
+
+  // Sidebar bileşeninden gelen değişikliği yakalayıp state’i güncelliyoruz
+  onCollapsed(v: boolean) {
+    this.collapsed = v;
+  }
 }
