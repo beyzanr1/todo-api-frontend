@@ -3,45 +3,26 @@
 
   --sidebar-open: 240px;   
   --sidebar-strip: 48px;   
-
-  --content-bg: #f7f7fb;
 }
 
 .layout {
   display: flex;
   min-height: 100vh;
+  padding-top: var(--topbar-h); 
 }
 
-/* Sidebar: topbarın altında sabit */
+
 .sidebar-area {
-  position: fixed;
-  top: var(--topbar-h);
-  left: 0;
   width: var(--sidebar-open);
-  height: calc(100vh - var(--topbar-h));
-  background: #fff;
-  border-right: 1px solid rgba(0,0,0,.06);
-  overflow: hidden;  /* sidebar’da scroll yok */
-  z-index: 900;
-  transition: width 160ms ease;
+  transition: width 180ms ease;
+}
+.layout.is-collapsed .sidebar-area {
+  width: var(--sidebar-strip);
 }
 
-/* İçerik: AÇIK durum için soldan boşluk */
+
 .content {
-  margin-top: var(--topbar-h);
-  margin-left: var(--sidebar-open);
-  padding: 24px;
-  min-width: 0;
-  overflow: auto;           /* scroll sadece içerikte */
-  background: var(--content-bg);
-  height: calc(100vh - var(--topbar-h));
-  transition: margin-left 160ms ease;
-}
-
-/* KAPALI (ince çizgi) */
-.layout.is-collapsed .sidebar-area { width: var(--sidebar-strip); }
-.layout.is-collapsed .content      { margin-left: var(--sidebar-strip); }
-
-@media (max-width: 768px) {
-  .content { padding: 16px; }
+  flex: 1;
+  padding: 16px;
+  
 }

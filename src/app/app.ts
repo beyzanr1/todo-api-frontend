@@ -10,9 +10,14 @@ import { Component } from '@angular/core';
 })
 export class App {
    collapsed = false;
+   isRed=true;
 
-  // Sidebar bileşeninden gelen değişikliği yakalayıp state’i güncelliyoruz
-  onCollapsed(v: boolean) {
-    this.collapsed = v;
+  
+   onCollapsed(value: boolean){
+
+
+    this.collapsed= value;
+   }
+
+
   }
-}

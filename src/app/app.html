@@ -1,13 +1,14 @@
 <app-topbar></app-topbar>
 
-<div class="layout" [class.is-collapsed]="collapsed">
+<div class="layout" [class.is-collapsed]="collapsed" >
   <app-sidebar
     class="sidebar-area"
     [collapsed]="collapsed"
     (collapsedChange)="onCollapsed($event)">
   </app-sidebar>
-
-  <main class="content">
+<div class="content">
     <router-outlet></router-outlet>
-  </main>
+  </div>
 </div>
+
+
