@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 })
 export class App {
    collapsed = false;
-   isRed=true;
+   
 
   
    onCollapsed(value: boolean){
