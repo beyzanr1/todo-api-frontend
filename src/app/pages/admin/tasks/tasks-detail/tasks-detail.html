@@ -1,3 +1,9 @@
-<h2>Görev Detayı</h2>
-<p><b>ID:</b>{{id}}</p>
-<a routerLink="/admin/tasks" mat-button>Listeye Dön</a>
+<app-detail-card
+  [title]="task ? ('#' + task.id + ' — ' + task.title) : 'Görev'"
+  [model]="task"
+  [fields]="fields"
+  [loading]="loading"
+  [error]="error"
+  (edit)="edit()"
+  (remove)="remove()">
+</app-detail-card>

@@ -1,0 +1,59 @@
+<!-- Loading -->
+<div *ngIf="loading" class="center">
+  <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+
+<!-- Error -->
+<div *ngIf="!loading && error" class="error">{{ error }}</div>
+
+<!-- Table area -->
+<div *ngIf="!loading && !error">
+  <div class="toolbar">
+    <mat-form-field appearance="outline" style="width:320px; margin: 8px 0 16px;">
+      <mat-label>Ara</mat-label>
+      <input
+        matInput
+        placeholder="metin ara..."
+        (input)="applyFilter(($any($event.target)).value)"
+      />
+    </mat-form-field>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z1" style="width:100%;">
+    @for (col of columns; track col.key) {
+      <ng-container [matColumnDef]="$any(col.key)">
+        
+        <!-- Başlık -->
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ col.header }}
+        </th>
+
+        <!-- İçerik -->
+        <td mat-cell *matCellDef="let row" 
+            [class.action-col]="col.kind === 'action'" 
+            (click)="col.kind !== 'action' && rowClickable && onRowClick(row)">
+          
+          @if (col.kind === 'action') {
+            <button
+              mat-button
+              color="primary"
+              (click)="action.emit({ type: col.actionType || 'action', row, col })">
+              {{ col.actionText || 'Detay' }}
+            </button>
+          } @else {
+            {{ col.valueFn ? col.valueFn(row) : $any(row)[$any(col.key)] }}
+          }
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedKeys"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedKeys"></tr>
+  </table>
+
+  <mat-paginator
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons>
+  </mat-paginator>
+</div>

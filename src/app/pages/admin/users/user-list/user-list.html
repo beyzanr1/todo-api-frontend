@@ -1,46 +1,9 @@
 <h2>Kullanıcılar</h2>
 
-<mat-form-field appearance="outline" style="width: 320px; margin: 8px 0 16px;">
-  <mat-label>Ara</mat-label>
-  <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="isim / e-posta...">
-</mat-form-field>
-
-<table mat-table [dataSource]="dataSource">
-
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>ID</th>
-    <td mat-cell *matCellDef="let r">{{ r.id }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Ad</th>
-    <td mat-cell *matCellDef="let r">{{ r.name }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="email">
-    <th mat-header-cell *matHeaderCellDef>E-posta</th>
-    <td mat-cell *matCellDef="let r">{{ r.email }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="role">
-    <th mat-header-cell *matHeaderCellDef>Rol</th>
-    <td mat-cell *matCellDef="let r">{{ r.role }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="created_at">
-    <th mat-header-cell *matHeaderCellDef>Oluşturma</th>
-    <td mat-cell *matCellDef="let r">{{ r.created_at }}</td>
-  </ng-container>
-
-  <ng-container matColumnDef="actions">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let r">
-      <a [routerLink]="['/admin/users', r.id]" mat-button>Detay</a>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
-
-<mat-paginator [pageSize]="10" [pageSizeOptions]="[5,10,20]" showFirstLastButtons></mat-paginator>
+<app-list-table
+  [columns]="columns"
+  [data]="users"
+  [loading]="isLoading"
+  [error]="error"
+  (action)="goDetail($event.row)">
+</app-list-table>

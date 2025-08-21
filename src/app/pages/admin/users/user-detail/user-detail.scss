@@ -1,0 +1,13 @@
+
+.center { display: grid; place-items: center; min-height: 120px; }
+.error { color: #b00020; margin: 8px 0 16px; }
+.card {
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 24px;
+}

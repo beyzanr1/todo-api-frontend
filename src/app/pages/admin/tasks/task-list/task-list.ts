@@ -1,27 +1,7 @@
-import { AfterViewInit,Component,viewChild,ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-
-type Status= 'pending'| 'completed';
-type Priority= 'low'|'medium'|'high';
-
-interface TaskRow{
-  id: number;
-  title:string;
-  status:Status;
-  priority: Priority;
-  user_id: number;
-  created_at: string;
-}
-
-const MOCK_TASKS: TaskRow[]= [
-  { id: 1, title: 'Angular öğren',    status: 'pending',   priority: 'medium', user_id: 1, created_at: '2025-07-22 17:59:03' },
-  { id: 2, title: 'Enum testi',       status: 'pending',   priority: 'high',   user_id: 1, created_at: '2025-07-22 18:28:18' },
-  { id: 3, title: 'E-posta kontrolü', status: 'completed', priority: 'low',    user_id: 2, created_at: '2025-07-22 18:28:18' },
-  { id: 4, title: 'Kod inceleme',     status: 'pending',   priority: 'medium', user_id: 2, created_at: '2025-07-22 18:28:18' },
-  { id: 5, title: 'Yeni Görev',       status: 'pending',   priority: 'high',   user_id: 3, created_at: '2025-07-29 14:46:17' },
-];
+import { Component,OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { TaskRow ,ColumnDef} from '../../../../models';
+import { TaskService } from '../../../../services/task.service';
 
 
 
@@ -31,22 +11,60 @@ const MOCK_TASKS: TaskRow[]= [
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss'
 })
-export class TaskList implements AfterViewInit{
-  displayedColumns=['id','title','status','priority','user_id','created_at','actions'];
-  dataSource= new MatTableDataSource<TaskRow>(MOCK_TASKS);
+export class TaskList implements  OnInit {
+  columns: ColumnDef<TaskRow>[] = [
+    { key: 'id',        header: 'ID' },
+    { key: 'title',     header: 'Başlık' },
+    { key: 'status',    header: 'Durum' },
+    { key: 'priority',  header: 'Öncelik' },
+    { key: 'user_id',   header: 'Kullanıcı' },
+    {
+      key: 'created_at',
+      header: 'Oluşturma',
+      valueFn: (t) => t.created_at ? new Date(t.created_at).toLocaleString() : ''
+    },
+    { key: 'actions',   header: 'Detay', kind: 'action', actionText: 'Detay', actionType: 'detail' }
+  ];
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort! : MatSort;
+  // İsteğe bağlı: Arama sadece bu alanlarda çalışsın
+  filterKeys: Array<keyof TaskRow | string> = ['id','title','status','priority','user_id','created_at'];
 
-  ngAfterViewInit() {
-    this.dataSource.paginator= this.paginator;
-    this.dataSource.sort= this.sort;
+  tasks: TaskRow[] = [];
+  loading = false;
+  error: string | null = null;
+
+  constructor(private taskService: TaskService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadTasks();
   }
 
-  applyFilter(value: string){
-    this.dataSource.filter= value.trim().toLowerCase();
+  private loadTasks(): void {
+    this.loading = true;
+    this.error = null;
+
+    this.taskService.list().subscribe({
+      next: (res) => {
+        const normalized = (res ?? []).map((t: any) => ({
+          ...t,
+          user_id:    t.user_id ?? t.userId ?? t.user?.id ?? null,
+          created_at: t.created_at ?? t.createdAt ?? null,
+          updated_at: t.updated_at ?? t.updatedAt ?? null,
+        })) as TaskRow[];
+
+        this.tasks = normalized;
+        this.loading = false;
+        console.table(normalized);
+      },
+      error: (err) => {
+        console.error('Tasks error:', err);
+        this.error = 'Görevler yüklenirken bir hata oluştu.';
+        this.loading = false;
+      },
+    });
   }
 
-
-
+  goDetail(row: TaskRow) {
+    this.router.navigate(['/admin','tasks', row.id]);
+  }
 }

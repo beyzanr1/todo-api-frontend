@@ -1,24 +1,8 @@
-import { Component } from '@angular/core';
-import { AfterViewInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table'; //veriyi tabloya bağlama
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { Component,OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
-type Role = 0 | 1 | 2; // backend’e göre uyarlayacağız
-interface UserRow {
-  id: number;
-  name: string;
-  email: string;
-  role: Role;
-  created_at: string;
-}
-
-const MOCK_USERS: UserRow[] = [
-  { id: 1, name: 'Nisa',   email: 'nisa@gmail.com',   role: 1, created_at: '2025-07-24 14:01:41' },
-  { id: 2, name: 'Beyza',  email: 'beyza@gmail.com',  role: 2, created_at: '2025-07-24 14:01:41' },
-  { id: 3, name: 'Emirhan',email: 'emirhan@gmail.com',role: 2, created_at: '2025-07-28 11:21:27' },
-];
-
+import { UserService } from '../../../../services/user.service';
+import { UserRow , ColumnDef} from '../../../../models';
 
 
 @Component({
@@ -27,19 +11,50 @@ const MOCK_USERS: UserRow[] = [
   templateUrl: './user-list.html',
   styleUrl: './user-list.scss'
 })
-export class UserList implements AfterViewInit {
-  displayedColumns = ['id', 'name', 'email', 'role', 'created_at', 'actions'];
-  dataSource = new MatTableDataSource<UserRow>(MOCK_USERS);
+export class UserList implements  OnInit {
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator; //sayflama
-  @ViewChild(MatSort) sort!: MatSort; // sıralama
+  columns: ColumnDef<UserRow>[] = [
+    { key: 'id',         header: 'ID' },
+    { key: 'name',       header: 'Ad' },
+    { key: 'email',      header: 'E-posta' },
+    { key: 'role',       header: 'Rol' },
+    {
+      key: 'created_at',
+      header: 'Oluşturma',
+      valueFn: (u) => (u.created_at ? new Date(u.created_at).toLocaleString() : '')
+    },
+     { key: 'actions', header: 'Detay', kind: 'action', actionText: 'Detay', actionType: 'detail' }
+  ];
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+  users: UserRow[] = [];
+  isLoading = false;
+  error: string | null = null;
+
+  constructor(private userSvc: UserService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadUsers();
   }
 
-  applyFilter(value: string) {
-    this.dataSource.filter = value.trim().toLowerCase();
+  private loadUsers(): void {
+    this.isLoading = true;
+    this.error = null;
+
+    this.userSvc.list().subscribe({
+      next: (res) => {
+        this.users = res ?? [];
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Users load error:', err);
+        this.error = 'Kullanıcılar yüklenirken bir hata oluştu.';
+        this.isLoading = false;
+      },
+    });
+  }
+
+  
+  goDetail(row: UserRow) {
+    this.router.navigate(['/admin', 'users', row.id]);
   }
 }

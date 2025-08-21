@@ -1,3 +1,9 @@
-<h2>Kullanıcı Detayı</h2>
-<p>Bu sayfa placeholder. Route param id ile dolduracağız.</p>
-<a routerLink="/admin/users" mat-button>← Listeye dön</a>
+<app-detail-card
+  [title]="user ? ('#' + user.id + ' — ' + user.name) : 'Kullanıcı'"
+  [model]="user"
+  [fields]="fields"
+  [loading]="loading"
+  [error]="error"
+  (edit)="edit()"
+  (remove)="remove()">
+</app-detail-card>

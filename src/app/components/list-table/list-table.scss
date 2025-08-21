@@ -1,0 +1,49 @@
+/* Loading & error */
+.center { display: grid; place-items: center; min-height: 120px; }
+.error  { color: #b00020; margin: 8px 0 16px; }
+
+/* Üst araç çubuğu (arama vb.) */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Tablo genel */
+table { width: 100%; border-collapse: collapse; }
+
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  padding: 8px 12px;
+}
+/* Aksiyon kolonu sağa yanaşsın */
+.action-col {
+  text-align: right;
+  white-space: nowrap;
+  width: 1%;
+}
+
+/* Düz butonun paddingle küçük görünmesi için */
+.action-btn {
+  min-width: 0;
+  padding: 0 8px;
+}
+
+tr.mat-row:hover td { background: rgba(0, 0, 0, 0.03); }
+td { cursor: pointer; }
+
+/* Opsiyonel: sticky son kolon (actions gibi) */
+.sticky-end {
+  position: sticky;
+  right: 0;
+  background: var(--mat-table-background, #fff);
+  box-shadow: -4px 0 6px rgba(0, 0, 0, 0.06);
+  z-index: 2;
+}
+
+/* Küçük ekranlarda arama alanını tam genişlik yap */
+@media (max-width: 640px) {
+  .toolbar mat-form-field { width: 100% !important; }
+}

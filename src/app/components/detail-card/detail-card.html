@@ -1,0 +1,21 @@
+<div *ngIf="loading" class=" center">
+    <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+</div>
+<div *ngIf="!loading && error" class="error"> {{error}}</div>
+<div *ngIf="!loading && !error && model" class="card">
+    <div class="card-header">
+        <h2 class="title">{{ title }}</h2>
+        <span class="spacer"></span>
+        <button mat-button color="primary" (click)="edit.emit()">Düzenle</button>
+        <button mat-button color="warn" (click)="remove.emit()"> Sil</button>
+
+    </div>
+    <div class="grid">
+        @for( f of fields; track $index){
+            <div class="row">
+                <div class="label">{{f.label}}</div>
+                <div class="value">{{getValue(f)}}</div>
+            </div>
+        }
+    </div>
+</div>
